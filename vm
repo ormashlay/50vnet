@@ -1,0 +1,31 @@
+# Login to Azure account
+Connect-AzAccount
+
+# Set variables
+$resourceGroupName = "MyResourceGroup"
+$location = "East US"
+$adminUsername = "adminuser"
+$adminPassword = "YourAdminPassword"
+$windowsVmName = "MyWindowsVM"
+$linuxVmName = "MyLinuxVM"
+
+# Create a resource group
+New-AzResourceGroup -Name $resourceGroupName -Location $location
+
+# Create a Windows virtual machine
+New-AzVm `
+    -ResourceGroupName $resourceGroupName `
+    -Name $windowsVmName `
+    -Location $location `
+    -Image "MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest" `
+    -Credential (Get-Credential -UserName $adminUsername -Message "Enter the password for the Windows VM") `
+    -Size "Standard_DS2_v2"
+
+# Create a Linux virtual machine
+New-AzVm `
+    -ResourceGroupName $resourceGroupName `
+    -Name $linuxVmName `
+    -Location $location `
+    -Image "Canonical:UbuntuServer:18.04-LTS:latest" `
+    -Credential (Get-Credential -UserName $adminUsername -Message "Enter the password for the Linux VM") `
+    -Size "Standard_DS2_v2"
